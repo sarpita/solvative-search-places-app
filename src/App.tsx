@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
+import SearchBox from './components/SearchBox';
+import ResultsTable from './components/ResultsTable';
+import Pagination from './components/Pagination';
+import Loader from './components/Loader';
+import './styles/App.css';
+import usePlacesSearch from './hooks/usePlacesSearch';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const { places, loading, searchPlaces } = usePlacesSearch();
+  const [limit, setLimit] = useState<number>(5);
+  const [page, setPage] = useState<number>(0);
+  const [query, setQuery] = useState<string>("");
+
+  const handleSearch = (newQuery: string) => {
+    setQuery(newQuery);  
+    setPage(0); 
+    searchPlaces(newQuery, limit, 0);
+  };
+
+  const handleNextPage = () => {
+    setPage(page + 1);
+    searchPlaces(query, limit, page + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 0) {
+      setPage(page - 1);
+      searchPlaces(query, limit, page - 1);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app">
+      <h1>Search Places</h1>
+      <SearchBox onSearch={handleSearch} />
+      <div className="limit-control">
+        <label>
+          Items per page:
+          <input
+            type="number"
+            min="5"
+            max="10"
+            value={limit}
+            onChange={(e) => setLimit(Number(e.target.value))}
+          />
+        </label>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      {loading ? <Loader /> : <ResultsTable places={places} />}
+      <Pagination
+        page={page}
+        onPrevious={handlePreviousPage}
+        onNext={handleNextPage}
+      />
+    </div>
+  );
+};
 
-export default App
+export default App;

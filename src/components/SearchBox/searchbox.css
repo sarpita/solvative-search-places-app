@@ -1,0 +1,44 @@
+.search-box-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 260px; /* Adjusted width for the search box and hint */
+  }
+  
+  .search-box {
+    width: 100%;
+    height: 38px;
+    font-size: 16px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(206, 212, 218);
+    padding: 6px 12px;
+    padding-right: 50px; /* Make space for the hint */
+    border-radius: 4px;
+    color: rgb(33, 37, 41);
+    font-family: system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .search-box::placeholder {
+    color: rgba(33, 37, 41, 0.6);
+  }
+  
+  .search-box-container.focused .search-box {
+    border-color: #7952b3;
+    box-shadow: 0 0 0 3px rgba(121, 82, 179, 0.25);
+  }
+  
+  .search-hint {
+    position: absolute;
+    right: 12px;
+    font-size: 12px;
+    color: rgb(133, 137, 140);
+    pointer-events: none;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  .search-box:disabled {
+    background-color: rgb(233, 236, 239);
+  }
